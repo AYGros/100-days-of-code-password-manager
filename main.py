@@ -1,5 +1,5 @@
 from tkinter import *
-
+from tkinter import messagebox
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -7,11 +7,23 @@ from tkinter import *
 
 
 def save():
-    with open("passwords.txt", "a") as passwords_file:
-        passwords_file.write(f"{website_input.get()}  |  {user_input.get()}  |  {password_input.get()}\n")
-    website_input.delete(0, END)
-    user_input.delete(0, END)
-    password_input.delete(0, END)
+    website = website_input.get()
+    email = user_input.get()
+    password = password_input.get()
+
+    if not website or not password:
+        alert = messagebox.showwarning(title="Missing Info", message="Please fill in all fields")
+
+    else:
+        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered:\nEmail: {email}\n"
+                                                      f"Password: {password} \nIs it ok to save?")
+
+        if is_ok:
+            with open("passwords.txt", "a") as passwords_file:
+                passwords_file.write(f"{website}  |  {email}  |  {password}\n")
+            website_input.delete(0, END)
+            user_input.delete(0, END)
+            password_input.delete(0, END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -41,7 +53,7 @@ website_input.focus()
 
 user_input = Entry(width=40)
 user_input.grid(row=2, column=1, columnspan=2)
-user_input.insert(0, "yuki.grosbuesch@onlinehome.de")
+user_input.insert(0, "AYGros@email.de")
 
 password_input = Entry(width=21)
 password_input.grid(row=3, column=1)
